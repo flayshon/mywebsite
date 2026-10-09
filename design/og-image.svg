@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FAFAF8"/>
+  <rect x="0" y="0" width="16" height="630" fill="#3254A8"/>
+  <g transform="translate(96 120) scale(3)"><rect width="32" height="32" rx="6" fill="#3254A8"/><path d="M11 8h11v3.5h-7v3h6v3.5h-6V24h-4z" fill="#fff"/></g>
+  <text x="96" y="340" font-family="Inter, Noto Sans, DejaVu Sans, sans-serif" font-size="88" font-weight="700" fill="#1B1F27" letter-spacing="-2">Flávio Melo</text>
+  <text x="96" y="420" font-family="Inter, Noto Sans, DejaVu Sans, sans-serif" font-size="44" fill="#4D5563">Software Engineer · Go, PHP, JavaScript</text>
+  <text x="96" y="530" font-family="DejaVu Sans Mono, Noto Sans Mono, monospace" font-size="34" fill="#3254A8">flayshon.com</text>
+</svg>

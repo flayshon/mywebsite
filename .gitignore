@@ -1,0 +1,9 @@
+# Private source material — never publish
+PROJECT_BRIEF.md
+*.pdf
+1770335909774.jpg
+
+# Local tooling
+.wrangler/
+node_modules/
+.DS_Store
