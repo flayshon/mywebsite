@@ -84,8 +84,9 @@ The form posts to [Web3Forms](https://web3forms.com/) (free plan: 250
 submissions per month), which emails each message to the address registered
 with the access key.
 
-1. Create an access key at https://web3forms.com/ using your email address.
-2. Replace `YOUR_WEB3FORMS_ACCESS_KEY` in `public/contact/index.html`.
+The key is the `access_key` hidden input in `public/contact/index.html`. To
+replace it, create a new key at https://web3forms.com/ with the destination
+email address and paste it there.
 
 The access key only identifies which inbox receives messages; it is meant to
 be placed in HTML and is not a password.
@@ -97,6 +98,15 @@ be placed in HTML and is not a password.
 - Spam mitigation is a hidden honeypot checkbox (`botcheck`). If spam becomes
   a problem, enable hCaptcha in Web3Forms or move to a Cloudflare Worker with
   Turnstile.
+
+## Analytics
+
+Cloudflare Web Analytics is enabled in the Cloudflare dashboard (Analytics &
+Logs → Web Analytics). Cloudflare injects its beacon script into every page
+automatically; it doesn't use cookies. The `Content-Security-Policy` in
+`public/_headers` allows the script from `static.cloudflareinsights.com`, and
+the beacon reports to `/cdn-cgi/rum` on the site's own domain. If you turn
+analytics off, remove that host from `script-src`.
 
 ## Checks
 
@@ -135,6 +145,35 @@ Performance budgets (compressed):
 4. Buy `flayshon.com` (Cloudflare Registrar sells at cost), then add it under
    the Worker's **Settings → Domains & Routes → Custom domain**. HTTPS is set
    up automatically.
+5. **Force HTTPS.** In the `flayshon.com` zone: **SSL/TLS → Edge
+   Certificates → Always Use HTTPS** → on. Without it, `http://` requests are
+   served unencrypted instead of being redirected.
+6. **Redirect `www` to the bare domain.**
+   - **DNS → Records → Add record:** type `A`, name `www`, IPv4 address
+     `192.0.2.1`, proxied (orange cloud). The address is a placeholder; the
+     redirect below runs before traffic would reach it.
+   - **Rules → Redirect Rules:** use the "Redirect from WWW to root" template
+     (or create a rule): when hostname equals `www.flayshon.com`, dynamically
+     redirect to `concat("https://flayshon.com", http.request.uri.path)` with
+     status `301` and "Preserve query string" enabled.
+7. **Web Analytics.** Enabled under **Analytics & Logs → Web Analytics** with
+   automatic setup, which injects Cloudflare's beacon into every page. The CSP
+   in `public/_headers` already allows it (see [Analytics](#analytics)).
+8. **Contact form key.** The Web3Forms access key must be in
+   `public/contact/index.html` (see [Contact form](#contact-form)); otherwise
+   every submission fails.
+
+To verify a deployment:
+
+```sh
+curl -sI https://flayshon.com/ | grep -i content-security-policy  # headers applied
+curl -sI http://flayshon.com/ | grep -i location                  # → https://flayshon.com/
+curl -sI https://www.flayshon.com/contact/ | grep -i location     # → https://flayshon.com/contact/
+curl -s -o /dev/null -w '%{http_code}\n' https://flayshon.com/nope  # 404
+```
+
+Then send a test message through the contact form and check that it arrives
+(look in spam the first time).
 
 Canonical URLs, the sitemap, structured data and the link-preview tags all use
 `https://flayshon.com/`. If the domain changes, search the repo for

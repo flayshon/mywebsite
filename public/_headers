@@ -1,8 +1,10 @@
 # Security headers for every response.
 # The script-src hash allows only the inline theme script in each page's <head>.
 # If you change that script, update the hash (see README).
+# static.cloudflareinsights.com is the Cloudflare Web Analytics beacon, which
+# Cloudflare injects automatically; it reports to /cdn-cgi/rum (allowed by 'self').
 /*
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'sha256-PTp3SxlPJJvqD9rd4XB/llBIYAz8GVajN4OqM5g/Mp4='; style-src 'self'; img-src 'self'; connect-src 'self' https://api.web3forms.com; form-action https://api.web3forms.com; base-uri 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'sha256-PTp3SxlPJJvqD9rd4XB/llBIYAz8GVajN4OqM5g/Mp4=' https://static.cloudflareinsights.com; style-src 'self'; img-src 'self'; connect-src 'self' https://api.web3forms.com; form-action https://api.web3forms.com; base-uri 'none'; frame-ancestors 'none'
   Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
